@@ -10,6 +10,7 @@ const Container = styled.div`
   min-width: 190px;
   flex-basis: 27%;
 `;
+
 type CardProps = {
   item: Item;
 };
@@ -26,4 +27,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export default React.memo(Card);
