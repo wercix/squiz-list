@@ -1,31 +1,14 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import styled from "styled-components";
-import Card from "./components/Card";
-import Select from "./components/Select";
+import Filters from "./components/Filters";
+import CardsList from "./components/CardsList";
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 `;
-const DataList = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  flex: 1;
-`;
-const FiltersComponent = styled.div`
-  padding: 24px;
-`;
-
-const orderOptions = [
-  "Asc by name",
-  "Desc by name",
-  "Asc by number of employees",
-  "Desc by number of employees",
-];
 
 export type Item = {
   id: number;
@@ -86,39 +69,17 @@ function App() {
 
   return (
     <Container>
-      <FiltersComponent>
-        <h2>Filters</h2>
-        <Select
-          id="country"
-          label="Country"
-          value={selectedCountry}
-          options={countries}
-          handleOnClick={setSelectedCountry}
-          hasAllOption={true}
-        />
-        <Select
-          id="industry"
-          label="Industry"
-          value={selectedIndustry}
-          options={industries}
-          handleOnClick={setSelectedIndustry}
-          hasAllOption={true}
-        />
-        <Select
-          id="order"
-          label="Order"
-          value={order}
-          options={orderOptions}
-          handleOnClick={setOrder}
-        />
-      </FiltersComponent>
-      <DataList>
-        {filteredData.length ? (
-          filteredData.map((item) => <Card key={item.id} item={item} />)
-        ) : (
-          <p>No data</p>
-        )}
-      </DataList>
+      <Filters
+        selectedCountry={selectedCountry}
+        countries={countries}
+        setSelectedCountry={setSelectedCountry}
+        selectedIndustry={selectedIndustry}
+        industries={industries}
+        setSelectedIndustry={setSelectedIndustry}
+        order={order}
+        setOrder={setOrder}
+      />
+      <CardsList data={filteredData} />
     </Container>
   );
 }
