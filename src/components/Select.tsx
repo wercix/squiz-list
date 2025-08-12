@@ -11,6 +11,7 @@ type SelectProps = {
   value: string;
   options: string[];
   handleOnClick: (value: string) => void;
+  hasAllOption?: boolean;
 };
 
 const Select: React.FC<SelectProps> = ({
@@ -19,6 +20,7 @@ const Select: React.FC<SelectProps> = ({
   value,
   options,
   handleOnClick,
+  hasAllOption = false
 }) => {
   return (
     <Container>
@@ -28,7 +30,7 @@ const Select: React.FC<SelectProps> = ({
         value={value}
         onChange={(e) => handleOnClick(e.target.value)}
       >
-        <option value="">All</option>
+        {hasAllOption && <option value="">All</option>}
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

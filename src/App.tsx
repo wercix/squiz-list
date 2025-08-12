@@ -20,6 +20,13 @@ const FiltersComponent = styled.div`
   padding: 24px;
 `;
 
+const orderOptions = [
+  "Asc by name",
+  "Desc by name",
+  "Asc by number of employees",
+  "Desc by number of employees",
+];
+
 export type Item = {
   id: number;
   name: string;
@@ -35,6 +42,7 @@ function App() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [industries, setIndustries] = useState<string[]>([]);
   const [selectedIndustry, setSelectedIndustry] = useState("");
+  const [order, setOrder] = useState<string>("Asc by name");
 
   useEffect(() => {
     fetch("https://dujour.squiz.cloud/developer-challenge/data")
@@ -55,15 +63,26 @@ function App() {
 
   useEffect(() => {
     setFilteredData(
-      data.filter((item) => {
-        const countryFilter =
-          selectedCountry !== "" ? item.country === selectedCountry : true;
-        const industryFilter =
-          selectedIndustry !== "" ? item.industry === selectedIndustry : true;
-        return countryFilter && industryFilter;
-      })
+      data
+        .filter((item) => {
+          const countryFilter =
+            selectedCountry !== "" ? item.country === selectedCountry : true;
+          const industryFilter =
+            selectedIndustry !== "" ? item.industry === selectedIndustry : true;
+          return countryFilter && industryFilter;
+        })
+        .sort((a, b) => {
+          if (order === "Asc by name") {
+            return a.name.localeCompare(b.name);
+          } else if (order === "Desc by name") {
+            return b.name.localeCompare(a.name);
+          } else if (order === "Asc by number of employees") {
+            return a.numberOfEmployees - b.numberOfEmployees;
+          }
+          return b.numberOfEmployees - a.numberOfEmployees;
+        })
     );
-  }, [data, selectedCountry, selectedIndustry]);
+  }, [data, order, selectedCountry, selectedIndustry]);
 
   return (
     <Container>
@@ -75,6 +94,7 @@ function App() {
           value={selectedCountry}
           options={countries}
           handleOnClick={setSelectedCountry}
+          hasAllOption={true}
         />
         <Select
           id="industry"
@@ -82,6 +102,14 @@ function App() {
           value={selectedIndustry}
           options={industries}
           handleOnClick={setSelectedIndustry}
+          hasAllOption={true}
+        />
+        <Select
+          id="order"
+          label="Order"
+          value={order}
+          options={orderOptions}
+          handleOnClick={setOrder}
         />
       </FiltersComponent>
       <DataList>
